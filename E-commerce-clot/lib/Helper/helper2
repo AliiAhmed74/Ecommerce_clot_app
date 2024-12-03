@@ -1,0 +1,215 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../core/provider.dart';
+
+
+class ProductPage extends StatelessWidget {
+  const ProductPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => ProductProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: InkWell(
+            onTap: () {},
+            child: Icon(Icons.arrow_back_ios_new),
+          ),
+          actions: [
+            InkWell(
+              onTap: () {},
+              child: Icon(Icons.favorite_border_outlined),
+            )
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Product Image
+              Container(
+                height: 280,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/Frame 92.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              // Product Title
+              Text(
+                "Men's Harrington Jacket",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // Product Price
+              Text(
+                "\$148",
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 25),
+              // Options (Size, Color, Quantity) with ListView
+              Expanded(
+                child: ListView(
+                  children: [
+                    // Size Option
+                    OptionTile(
+                      label: "Size",
+                      child: Consumer<ProductProvider>(
+                        builder: (context, provider, _) {
+                          return DropdownButton<String>(
+                            value: provider.selectedSize,
+                            items: ["S", "M", "L", "XL"]
+                                .map(
+                                  (size) => DropdownMenuItem<String>(
+                                value: size,
+                                child: Text(size),
+                              ),
+                            )
+                                .toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                provider.setSize(value);
+                              }
+                            },
+                            underline: SizedBox(),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    // Color Option
+                    OptionTile(
+                      label: "Color",
+                      child: Consumer<ProductProvider>(
+                        builder: (context, provider, _) {
+                          return DropdownButton<String>(
+                            value: provider.selectedColor,
+                            items: ["Green", "Blue", "Red", "Yellow"]
+                                .map(
+                                  (color) => DropdownMenuItem<String>(
+                                value: color,
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: _getColor(color),
+                                      radius: 8,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(color),
+                                  ],
+                                ),
+                              ),
+                            )
+                                .toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                provider.setColor(value);
+                              }
+                            },
+                            underline: SizedBox(),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    // Quantity Option
+                    OptionTile(
+                      label: "Quantity",
+                      child: Consumer<ProductProvider>(
+                        builder: (context, provider, _) {
+                          return Row(
+                            children: [
+                              IconButton(
+                                onPressed: provider.decrementQuantity,
+                                icon: Icon(Icons.remove, color: Colors.white),
+                                color: Colors.purple,
+                                padding: EdgeInsets.all(8),
+                                constraints: BoxConstraints(),
+                              ),
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                                child: Text(
+                                  provider.quantity.toString(),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: provider.incrementQuantity,
+                                icon: Icon(Icons.add, color: Colors.white),
+                                color: Colors.purple,
+                                padding: EdgeInsets.all(8),
+                                constraints: BoxConstraints(),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _getColor(String colorName) {
+    switch (colorName) {
+      case 'Green':
+        return Colors.green;
+      case 'Blue':
+        return Colors.blue;
+      case 'Red':
+        return Colors.red;
+      case 'Yellow':
+        return Colors.yellow;
+      default:
+        return Colors.grey;
+    }
+  }
+}
+
+class OptionTile extends StatelessWidget {
+  final String label;
+  final Widget child;
+
+  const OptionTile({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
+}

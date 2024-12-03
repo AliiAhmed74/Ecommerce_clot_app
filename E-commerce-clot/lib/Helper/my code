@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+import 'package:training_project/core/colors.dart';
+
+class ProductPage extends StatelessWidget {
+  const ProductPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        // toolbarHeight: 50,
+        leading: InkWell(
+            onTap: () {},
+            child: Icon(Icons.arrow_back_ios_new)),
+        actions: [
+          InkWell(
+              onTap: () {},
+              child: Icon(Icons.favorite_border_outlined))
+        ]
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          left: 20,
+          top: 15
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 280,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage("assets/Frame 92.png"),fit: BoxFit.cover)
+              ),
+            ),
+            Text("Men's Harrington Jacket",style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold
+            ),),
+            Text("\$148",style: TextStyle(
+              color: CustomColors.purble,
+              fontWeight: FontWeight.w500
+            ),),
+            SizedBox(
+              height: 25,
+            ),
+            Container(
+              height: 150,
+              child: ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    Text("Size"),
+                    //_______________________//
+                    Text("s"),
+
+                  ],
+                );
+              },),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
